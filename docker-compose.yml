@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  php:
+    build:
+      dockerfile: web.dockerfile
+      context: docker/dockerfiles
+    container_name: php-srv
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - .:/var/www/html
+  
+  db:
+    image: mysql
+    container_name: mysql-srv
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
